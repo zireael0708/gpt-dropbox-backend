@@ -6,7 +6,7 @@ import dropbox
 load_dotenv()
 
 DROPBOX_TOKEN = os.getenv("DROPBOX_ACCESS_TOKEN")
-DROPBOX_FOLDER = "/GPT_Files"  # promeni ako koristiš drugi folder
+DROPBOX_FOLDER = "/Operations"  # promeni ako koristiš drugi folder
 
 app = FastAPI()
 dbx = dropbox.Dropbox(DROPBOX_TOKEN)
