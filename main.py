@@ -6,7 +6,7 @@ import dropbox
 load_dotenv()
 
 DROPBOX_TOKEN = os.getenv("DROPBOX_ACCESS_TOKEN")
-DROPBOX_FOLDER = "/Operations"  # ili "" ako testiraš root
+DROPBOX_FOLDER = "/Operations"  # može se promeniti nakon što otkrijemo tačan put
 
 app = FastAPI()
 dbx = dropbox.Dropbox(DROPBOX_TOKEN)
@@ -40,7 +40,12 @@ def read_file(name: str):
 @app.get("/folders")
 def list_folders():
     try:
-        result = dbx.files_list_folder(path="", recursive=False)
+        result = dbx.files_list_folder(
+            path="",
+            recursive=False,
+            include_mounts=True,
+            include_non_downloadable_files=False
+        )
         folders = [
             entry.path_display for entry in result.entries
             if isinstance(entry, dropbox.files.FolderMetadata)
