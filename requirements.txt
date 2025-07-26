@@ -1,5 +1,4 @@
-fastapi
-uvicorn
-python-dotenv
 flask
+gunicorn
+python-dotenv
 dropbox
