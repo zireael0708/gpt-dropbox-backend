@@ -38,3 +38,12 @@ def list_root():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+@app.route("/create-test-file")
+def create_test_file():
+    try:
+        dbx = dropbox.Dropbox(DROPBOX_ACCESS_TOKEN)
+        dbx.files_upload(b"Test fajl iz API-ja", "/test.txt", mute=True)
+        return jsonify({"message": "Fajl uspešno kreiran."})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
