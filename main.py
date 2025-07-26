@@ -6,7 +6,7 @@ import dropbox
 load_dotenv()
 
 DROPBOX_TOKEN = os.getenv("DROPBOX_ACCESS_TOKEN")
-DROPBOX_FOLDER = "/GPT_Files"  # folder koji si kreirao
+DROPBOX_FOLDER = "/GPT_Files"  # promeni ako koristiš drugi folder
 
 app = FastAPI()
 dbx = dropbox.Dropbox(DROPBOX_TOKEN)
@@ -34,4 +34,4 @@ def read_file(name: str):
         content = res.content.decode("utf-8", errors="ignore")
         return {"filename": name, "content": content}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Greška prilikom čitanja: {e}"})
+        raise HTTPException(status_code=500, detail=f"Greška prilikom čitanja: {e}")
