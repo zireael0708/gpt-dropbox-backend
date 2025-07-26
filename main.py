@@ -36,9 +36,6 @@ def list_root():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-if __name__ == "__main__":
-    app.run(debug=True)
-
 @app.route("/create-test-file")
 def create_test_file():
     try:
@@ -47,3 +44,18 @@ def create_test_file():
         return jsonify({"message": "Fajl uspešno kreiran."})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@app.route("/list-files")
+def list_files():
+    try:
+        dbx = dropbox.Dropbox(DROPBOX_ACCESS_TOKEN)
+        result = dbx.files_list_folder(path="")  # App folder root
+
+        file_names = [entry.name for entry in result.entries]
+        return jsonify({"files": file_names})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+if __name__ == "__main__":
+    app.run(debug=True)
