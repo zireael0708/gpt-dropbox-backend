@@ -45,3 +45,11 @@ def check_folder(folder_name: str):
         return {"exists": True, "path": metadata.path_display}
     except dropbox.exceptions.ApiError:
         return {"exists": False, "path": path}
+
+@app.get("/debug-root")
+def debug_root():
+    try:
+        files = dbx.files_list_folder(path="")
+        return {"root": [entry.name for entry in files.entries]}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Greška: {e}")
