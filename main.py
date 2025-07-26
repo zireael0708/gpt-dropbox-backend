@@ -6,7 +6,7 @@ import dropbox
 load_dotenv()
 
 DROPBOX_TOKEN = os.getenv("DROPBOX_ACCESS_TOKEN")
-DROPBOX_FOLDER = "/Operations"  # može se promeniti nakon što otkrijemo tačan put
+DROPBOX_FOLDER = "/Operations"  # koristi kad budeš siguran u naziv
 
 app = FastAPI()
 dbx = dropbox.Dropbox(DROPBOX_TOKEN)
@@ -37,19 +37,11 @@ def read_file(name: str):
         raise HTTPException(status_code=500, detail=f"Greška prilikom čitanja: {e}")
 
 
-@app.get("/folders")
-def list_folders():
+@app.get("/check-folder/{folder_name}")
+def check_folder(folder_name: str):
+    path = f"/{folder_name}"
     try:
-        result = dbx.files_list_folder(
-            path="",
-            recursive=False,
-            include_mounts=True,
-            include_non_downloadable_files=False
-        )
-        folders = [
-            entry.path_display for entry in result.entries
-            if isinstance(entry, dropbox.files.FolderMetadata)
-        ]
-        return {"folders": folders}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Greška prilikom listanja foldera: {e}")
+        metadata = dbx.files_get_metadata(path)
+        return {"exists": True, "path": metadata.path_display}
+    except dropbox.exceptions.ApiError:
+        return {"exists": False, "path": path}
