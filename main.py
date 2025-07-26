@@ -57,5 +57,15 @@ def list_files():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route("/get-file-content/<filename>")
+def get_file_content(filename):
+    try:
+        dbx = dropbox.Dropbox(DROPBOX_ACCESS_TOKEN)
+        metadata, res = dbx.files_download("/" + filename)
+        content = res.content.decode("utf-8")  # pretpostavlja da je fajl u UTF-8 formatu
+        return jsonify({"filename": filename, "content": content})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 if __name__ == "__main__":
     app.run(debug=True)
