@@ -6,7 +6,7 @@ import dropbox
 load_dotenv()
 
 DROPBOX_TOKEN = os.getenv("DROPBOX_ACCESS_TOKEN")
-DROPBOX_FOLDER = "/Operations"  # promeni ako koristiš drugi folder
+DROPBOX_FOLDER = "/Operations"  # probaj različite putanje ako bude grešaka
 
 app = FastAPI()
 dbx = dropbox.Dropbox(DROPBOX_TOKEN)
@@ -31,7 +31,4 @@ def read_file(name: str):
     path = f"{DROPBOX_FOLDER}/{name}"
     try:
         metadata, res = dbx.files_download(path)
-        content = res.content.decode("utf-8", errors="ignore")
-        return {"filename": name, "content": content}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Greška prilikom čitanja: {e}")
+        content = res.content.decode("utf-8", errors="ign
